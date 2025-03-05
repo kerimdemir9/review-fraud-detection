@@ -25,10 +25,8 @@ A Spring Boot API sends reviews into a kafka topic and a fraud detection ML mode
 ```
 ### KafkaConsumer
 ```text
-First checks for the model in local directory and 
-if no model is found, imports the model from Hugging Face.
+First checks for the model in local directory and if no model is found, imports the model from Hugging Face.
 
 Reads from Kafka Topic for latest reviews sent.
-Sends each review to model for classification and 
-sends the results back to the API.
+Sends each review to model for classification and sends the results back to the API.
 ```
