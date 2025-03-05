@@ -4,7 +4,7 @@ import json
 import requests
 import torch
 
-# Load model and tokenizer once (from local storage if available)
+# Load model and tokenizer once (from local if available)
 MODEL_PATH = "./fraud_model_local"  # Change if needed
 try:
     tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
@@ -15,9 +15,8 @@ except:
     model = AutoModelForSequenceClassification.from_pretrained("austinb/fraud_text_detection")
     print("Model downloaded from Hugging Face.")
 
-# Function to predict fraud or legit
 def predict_review(text):
-    inputs = tokenizer(text, return_tensors="pt")  # Convert to tensor
+    inputs = tokenizer(text, return_tensors="pt")  
     with torch.no_grad():
         outputs = model(**inputs)
 
@@ -35,12 +34,12 @@ def predict_review(text):
 consumer = KafkaConsumer(
     "reviews-topic",
     bootstrap_servers="localhost:9092",
-    auto_offset_reset="latest",  # Read messages from the start if no previous offset
+    auto_offset_reset="latest",  # Read latest messages sent // not from the start
     enable_auto_commit=True,
     value_deserializer=lambda m: json.loads(m.decode("utf-8"))
 )
 
-# Spring Boot API URL
+
 API_URL = "http://localhost:8080/reviews/update"
 
 print("Listening for new reviews...")
